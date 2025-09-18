@@ -1,0 +1,27 @@
+/* src/pages/Welcome.css */
+.welcome-container {
+    height: 100vh;
+    background: linear-gradient(to right, #a8edea, #fed6e3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .welcome-box {
+    background-color: rgb(21, 131, 148);
+    padding: 3rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .welcome-box h1 {
+    margin-bottom: 2rem;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  

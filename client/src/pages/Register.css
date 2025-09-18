@@ -1,0 +1,26 @@
+/* Make form labels bold and add spacing */
+.form-label {
+    font-weight: bold;
+    margin-bottom: 6px;
+    display: block;
+  }
+  
+  /* Style card container */
+  .custom-card {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+  
+  /* Custom primary button override */
+  .btn-primary {
+    background-color: #0066ff;
+    border-color: #0066ff;
+  }
+  
+  .btn-primary:hover {
+    background-color: #004bcc;
+    border-color: #004bcc;
+  }
+  
