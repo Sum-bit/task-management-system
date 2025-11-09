@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: taskmanager-backend
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn backend.wsgi"
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:///db.sqlite3
+      - key: DJANGO_SETTINGS_MODULE
+        value: backend.settings
+      - key: PYTHON_VERSION
+        value: 3.10.12
