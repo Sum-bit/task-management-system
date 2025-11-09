@@ -15,27 +15,74 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://127.0.0.1:8000/api/login/', credentials); // 🔄 Updated endpoint
-      const token = res.data.token; // 🔄 Changed from 'key' to 'token'
+      // ✅ Post username + password (no email)
+      console.log("📤 Sending login payload:", {
+  username: credentials.username,
+  password: credentials.password,
+});
 
-      localStorage.setItem('token', token); // ✅ Store token
+      const res = await axios.post(
+  'http://127.0.0.1:8000/api/auth/login/',
+  {
+    username: credentials.username,
+    password: credentials.password,
+  },
+  {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }
+);
 
-      toast.success('Login successful!');
+
+      const token = res.data.token;
+      localStorage.setItem('authToken', token); // store auth token
+      localStorage.setItem('username', res.data.username); // optional, for navbar display
+
+      toast.success('✅ Login successful!');
       navigate('/dashboard');
     } catch (err: any) {
-      const errorMsg = err.response?.data?.non_field_errors?.[0] || err.response?.data?.detail || 'Login failed';
+      console.error('Login error:', err);
+      const errorMsg =
+        err.response?.data?.error ||
+        err.response?.data?.detail ||
+        '❌ Invalid username or password';
       toast.error(errorMsg);
     }
   };
 
   return (
-    <div className="card p-4 mx-auto" style={{ maxWidth: '400px' }}>
-      <h2 className="mb-3">Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input name="username" className="form-control mb-2" placeholder="Username" onChange={handleChange} />
-        <input name="password" type="password" className="form-control mb-3" placeholder="Password" onChange={handleChange} />
-        <button className="btn btn-success w-100" type="submit">Login</button>
-      </form>
+    <div className="d-flex align-items-center justify-content-center min-vh-100 bg-gradient-custom p-4">
+      <div className="card shadow-lg p-4 w-100" style={{ maxWidth: '400px' }}>
+        <h2 className="text-center mb-4 fw-bold">Login 👤</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <input
+              name="username"
+              type="text"
+              placeholder="Username"
+              value={credentials.username}
+              onChange={handleChange}
+              className="form-control"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              value={credentials.password}
+              onChange={handleChange}
+              className="form-control"
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary w-100 fw-semibold">
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

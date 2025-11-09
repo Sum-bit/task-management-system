@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
           <Link to="/dashboard" className="nav-link text-light d-flex align-items-center">
             <span role="img" aria-label="dashboard" className="me-1">📊</span> Dashboard
           </Link>
-          <Link to="/create-task" className="nav-link text-light d-flex align-items-center">
+          <Link to="/create" className="nav-link text-light d-flex align-items-center">
             <span role="img" aria-label="create" className="me-1">➕</span> Create Task
           </Link>
           <button className="btn btn-outline-warning btn-sm d-flex align-items-center" onClick={handleLogout}>

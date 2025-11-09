@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import './Register.css'; // You can define any custom CSS here if needed
-export {}
+import './Register.css';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     username: '',
+    full_name: '',
     email: '',
     password1: '',
     password2: '',
@@ -17,46 +17,35 @@ const Register: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
+    // Basic client-side validation
+    if (!formData.username || !formData.full_name || !formData.email || !formData.password1 || !formData.password2) {
+      toast.error('Please fill in all fields.');
+      return;
+    }
+
+    if (formData.password1 !== formData.password2) {
+      toast.error('Passwords do not match.');
+      return;
+    }
+
     try {
-      await axios.post('http://127.0.0.1:8000/api/auth/register/', formData);
-      toast.success('✅ Registration successful! Please check your email.');
+      const res = await axios.post('http://127.0.0.1:8000/api/auth/register/', formData);
+      toast.success('✅ OTP sent to your email. Please verify.');
+      localStorage.setItem('pendingEmail', formData.email);
       navigate('/verify-otp');
-    } catch (error: any) {
-      console.error("Registration error:", error);
-      const errors = error.response?.data;
-  
-      if (errors && typeof errors === 'object') {
-        Object.entries(errors).forEach(([key, value]) => {
-          if (Array.isArray(value)) {
-            value.forEach((msg) => {
-              toast.error(`${key}: ${msg}`);
-            });
-          } else if (typeof value === 'string') {
-            toast.error(`${key}: ${value}`);
-          } else {
-            toast.error(`${key}: ${JSON.stringify(value)}`);
-          }
-        });
-      } else {
-        toast.error('❌ Registration failed. Please try again.');
-      }
-  
-      // Clear the form
-      setFormData({
-        username: '',
-        email: '',
-        password1: '',
-        password2: '',
-      });
+    } catch (err: any) {
+      console.error('Registration error:', err);
+      const errorMsg =
+        err.response?.data?.error || '❌ Registration failed. Please check your details.';
+      toast.error(errorMsg);
     }
   };
-  
 
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100 bg-gradient-custom p-4">
@@ -69,6 +58,17 @@ const Register: React.FC = () => {
               type="text"
               placeholder="Username"
               value={formData.username}
+              onChange={handleChange}
+              className="form-control"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <input
+              name="full_name"
+              type="text"
+              placeholder="Full Name"
+              value={formData.full_name}
               onChange={handleChange}
               className="form-control"
               required

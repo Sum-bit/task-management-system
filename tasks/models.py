@@ -35,6 +35,7 @@ class EmailOTP(models.Model):
     password = models.CharField(max_length=128, blank=True, null=True)
     otp = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
+    verified_at = models.DateTimeField(null=True, blank=True)
     is_verified = models.BooleanField(default=False)
     failed_attempts = models.IntegerField(default=0)
     is_locked = models.BooleanField(default=False)
